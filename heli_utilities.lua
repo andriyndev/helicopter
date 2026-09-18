@@ -194,7 +194,7 @@ local function turn_on(self)
 end
 
 function helicopter.sound_and_animation_manager(self)
-    local touching_ground, liquid_below = helicopter.check_node_below(self.object)
+    local touching_ground, liquid_below = helicopter.check_node_below(self)
     if not self.driver_name then
         --no pilot
         if (touching_ground or liquid_below) then

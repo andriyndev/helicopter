@@ -19,15 +19,30 @@ if not core.global_exists("matrix3") then
 	dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "matrix.lua")
 end
 
-function helicopter.check_node_below(obj)
-	local pos_below = obj:get_pos()
-	pos_below.y = pos_below.y - 0.1
-	local node_below = core.get_node(pos_below).name
-	local nodedef = core.registered_nodes[node_below]
-	local touching_ground = not nodedef or -- unknown nodes are solid
-			nodedef.walkable or false
-	local liquid_below = not touching_ground and nodedef.liquidtype ~= "none"
-	return touching_ground, liquid_below
+function helicopter.check_node_below(self)
+	local pos_below = self.object:get_pos()
+	local cbox = self.initial_properties.collisionbox
+	local x_min = math.round(pos_below.x + cbox[1])
+	local z_min = math.round(pos_below.z + cbox[3])
+	local x_max = math.round(pos_below.x + cbox[4])
+	local z_max = math.round(pos_below.z + cbox[6])
+	local y = pos_below.y - 0.1
+
+	local liquid_below = false
+	for x = x_min,x_max do
+		for z = z_min,z_max do
+			local node_name = core.get_node(vector.new(x, y, z)).name
+			local nodedef = core.registered_nodes[node_name]
+			 -- unknown nodes are solid
+			local touching_ground = not nodedef or nodedef.walkable or false
+			if touching_ground then
+				return touching_ground, false
+			end
+			liquid_below = liquid_below or nodedef.liquidtype ~= "none"
+		end
+	end
+
+	return false, liquid_below
 end
 
 function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel_before)
@@ -64,14 +79,12 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 	local max_height = 1500
 	local vert_vel_goal = 0
 	if not liquid_below then
-		if ctrl.jump then
-			local compensated_vert_speed = helicopter.wanted_vert_speed
-			local curr_percent_height = (100 - ((position.y * 100) / max_height))/100
-			compensated_vert_speed = compensated_vert_speed * curr_percent_height
-			vert_vel_goal = vert_vel_goal + compensated_vert_speed
+		local cur_height_rel = math.max(math.min(position.y / max_height, 2.0), 0)
+		if ctrl.jump or cur_height_rel > 1 then
+			vert_vel_goal = vert_vel_goal + helicopter.wanted_vert_speed * (1 - cur_height_rel)
 		end
 		if ctrl.sneak then
-			vert_vel_goal = vert_vel_goal - helicopter.wanted_vert_speed
+			vert_vel_goal = vert_vel_goal - helicopter.wanted_vert_speed * (1 + cur_height_rel)
 		end
 	else
 		vert_vel_goal = helicopter.wanted_vert_speed
@@ -135,7 +148,6 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 			rot.y = yaw
 		end
 
-
 	else
 		rot.x = 0
 		rot.z = 0
@@ -154,19 +166,16 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 	if self.energy > 0 and touching_ground == false then
 
 		local consumed_power = (power/1500)
-		self.energy = self.energy - consumed_power;
+		self.energy = math.max(self.energy - consumed_power, 0);
 
 		local energy_indicator_angle = ((self.energy * 18) - 90) * -1
-		if self.pointer:get_luaentity() then
-			self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
-		else
+		if not self.pointer:get_luaentity() then
 			--in case it have lost the entity by some conflict
 			self.pointer=core.add_entity({x=0,y=11.26,z=9.37},"nss_helicopter:pointer")
-			self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
 		end
+		self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
 	end
 	if self.energy <= 0 then
-		power = 0.2
 		if touching_ground or liquid_below then
 			--criar uma fucao pra isso pois ela repete na linha 268
 			-- sound and animation
@@ -174,6 +183,9 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 			self.object:set_animation_frame_speed(0)
 			-- gravity
 			self.object:set_acceleration(vector.multiply(helicopter.vector_up, -helicopter.gravity))
+			return
+		else
+			power = helicopter.power_min * dtime
 		end
 	end
 	----------------------------
@@ -185,5 +197,3 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 	added_vel = vector.add(added_vel, vector.multiply(helicopter.vector_up, -helicopter.gravity * dtime))
 	return vector.add(vel_before, added_vel)
 end
-
-
