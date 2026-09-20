@@ -12,7 +12,7 @@ function helicopter.paint(self, colstr)
         self.color = colstr
         local l_textures = self.initial_properties.textures
         for i, texture in ipairs(l_textures) do
-            local indx
+            local _, indx
             _, indx = texture:find('nss_helicopter_painting.png')
             if indx then
                 l_textures[i] = "nss_helicopter_painting.png^[multiply:".. colstr
