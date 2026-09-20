@@ -73,9 +73,9 @@ function helicopter.attach(self, player)
     core.after(0.2, function()
         local player = core.get_player_by_name(name)
         if player then
-	        --player_api.set_animation(player, "sit")
+            --player_api.set_animation(player, "sit")
             player:set_animation({x =  81, y = 160},30, 0, true)
-            update_heli_hud(player)
+            helicopter.update_heli_hud(player)
         end
     end)
     -- disable gravity
@@ -98,7 +98,7 @@ function helicopter.dettach(self, player)
     self.object:set_acceleration(vector.multiply(helicopter.vector_up, -helicopter.gravity))
 
     --remove hud
-    if player then remove_heli_hud(player) end
+    if player then helicopter.remove_heli_hud(player) end
 end
 
 -- attach passenger
@@ -165,15 +165,15 @@ function helicopter.destroy(self, puncher)
 
     pos.y=pos.y+2
     for i=1,8 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
     end
 
     for i=1,7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
     end
 
     for i=1,7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
     end
 
     core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steelblock')

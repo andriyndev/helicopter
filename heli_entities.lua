@@ -200,7 +200,7 @@ core.register_entity("nss_helicopter:heli", {
 			local player = core.get_player_by_name(self.driver_name)
 			if helicopter.helicopter_last_time_command > 0.3 then
 				helicopter.helicopter_last_time_command = 0
-				update_heli_hud(player)
+				helicopter.update_heli_hud(player)
 			end
 		else
 			-- for some error the player can be detached from the helicopter, so lets set him attached again
@@ -221,7 +221,7 @@ core.register_entity("nss_helicopter:heli", {
 
 					--why its here? cause if the sound is attached, player must so
 					local player_owner = core.get_player_by_name(self.owner)
-					if player_owner then remove_heli_hud(player_owner) end
+					if player_owner then helicopter.remove_heli_hud(player_owner) end
 				end
 			end
 		end
