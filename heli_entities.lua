@@ -52,10 +52,21 @@ core.register_entity("nss_helicopter:heli", {
 		visual = "mesh",
 		mesh = "nss_helicopter_heli.b3d",
 		backface_culling = false,
-		textures = {"nss_helicopter_interior_black.png", "nss_helicopter_metal.png", "nss_helicopter_strips.png",
-				"nss_helicopter_painting.png", "nss_helicopter_black.png", "nss_helicopter_aluminum.png", "nss_helicopter_glass.png",
-				"nss_helicopter_interior.png", "nss_helicopter_panel.png", "nss_helicopter_colective.png", "nss_helicopter_painting.png",
-				"nss_helicopter_rotors.png", "nss_helicopter_interior_black.png",},
+		textures = {
+			"nss_helicopter_interior_black.png",
+			"nss_helicopter_metal.png",
+			"nss_helicopter_strips.png",
+			"nss_helicopter_painting.png",
+			"nss_helicopter_black.png",
+			"nss_helicopter_aluminum.png",
+			"nss_helicopter_glass.png",
+			"nss_helicopter_interior.png",
+			"nss_helicopter_panel.png",
+			"nss_helicopter_colective.png",
+			"nss_helicopter_painting.png",
+			"nss_helicopter_rotors.png",
+			"nss_helicopter_interior_black.png",
+		},
 	},
 
 	driver_name = nil,
@@ -83,7 +94,7 @@ core.register_entity("nss_helicopter:heli", {
 		})
 	end,
 
-	on_activate = function(self, staticdata, dtime_s)
+	on_activate = function(self, staticdata, _)
 		if staticdata ~= "" and staticdata ~= nil then
 			local data = core.deserialize(staticdata) or {}
 			self.energy = data.stored_energy
@@ -231,7 +242,7 @@ core.register_entity("nss_helicopter:heli", {
 		self.object:set_velocity(vel)
 	end,
 
-	on_punch = function(self, puncher, ttime, toolcaps, dir, damage)
+	on_punch = function(self, puncher, _, toolcaps)
 		if not puncher or not puncher:is_player() then
 			return
 		end

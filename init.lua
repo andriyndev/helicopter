@@ -8,13 +8,12 @@ helicopter.S = nil
 
 if(core.get_translator ~= nil) then
     helicopter.S = core.get_translator(core.get_current_modname())
-
 else
     helicopter.S = function ( s ) return s end
-
 end
 
-local S = helicopter.S
+local path = core.get_modpath(core.get_current_modname())
+helicopter.path = path
 
 helicopter.friction_air_quadratic = 0.01
 helicopter.friction_air_constant = 0.2
@@ -41,14 +40,13 @@ helicopter.colors ={
     yellow='#ffe400',
 }
 
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "settings.lua")
---dofile(core.get_modpath(core.get_current_modname()) .. DIR_DELIM .. "heli_hud.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_hud.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_utilities.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_entities.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_crafts.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_control.lua")
-dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "heli_fuel_management.lua")
+dofile(path .. "/settings.lua")
+dofile(path .. "/heli_hud.lua")
+dofile(path .. "/heli_utilities.lua")
+dofile(path .. "/heli_entities.lua")
+dofile(path .. "/heli_crafts.lua")
+dofile(path .. "/heli_control.lua")
+dofile(path .. "/heli_fuel_management.lua")
 
 
 helicopter.helicopter_last_time_command = 0
@@ -58,7 +56,7 @@ helicopter.helicopter_last_time_command = 0
 --
 
 if not core.global_exists("matrix3") then
-	dofile(core.get_modpath("nss_helicopter") .. DIR_DELIM .. "matrix.lua")
+	dofile(path .. "/matrix.lua")
 end
 
 helicopter.creative = core.global_exists("creative")

@@ -11,17 +11,18 @@ function helicopter.paint(self, colstr)
     if colstr then
         self.color = colstr
         local l_textures = self.initial_properties.textures
-        for _, texture in ipairs(l_textures) do
-            local i,indx = texture:find('nss_helicopter_painting.png')
+        for i, texture in ipairs(l_textures) do
+            local indx
+            _, indx = texture:find('nss_helicopter_painting.png')
             if indx then
-                l_textures[_] = "nss_helicopter_painting.png^[multiply:".. colstr
+                l_textures[i] = "nss_helicopter_painting.png^[multiply:".. colstr
             end
-            local i,indx = texture:find('nss_helicopter_colective.png')
+            _, indx = texture:find('nss_helicopter_colective.png')
             if indx then
-                l_textures[_] = "nss_helicopter_colective.png^[multiply:".. colstr
+                l_textures[i] = "nss_helicopter_colective.png^[multiply:".. colstr
             end
         end
-	    self.object:set_properties({textures=l_textures})
+        self.object:set_properties({textures=l_textures})
     end
 end
 
@@ -164,15 +165,15 @@ function helicopter.destroy(self, puncher)
     self.object:remove()
 
     pos.y=pos.y+2
-    for i=1,8 do
+    for _=1,8 do
         core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
     end
 
-    for i=1,7 do
+    for _=1,7 do
         core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
     end
 
-    for i=1,7 do
+    for _=1,7 do
         core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
     end
 
