@@ -225,9 +225,11 @@ core.register_entity("nss_helicopter:heli", {
 				if self.sound_handle ~= nil then
 					helicopter.sound_and_animation_manager(self, touching_ground or liquid_below)
 
-					--why its here? cause if the sound is attached, player must so
-					local player = core.get_player_by_name(self.driver_name)
-					if player then helicopter.remove_heli_hud(player) end
+					if self.driver_name then
+						--why its here? cause if the sound is attached, player must so
+						local player = core.get_player_by_name(self.driver_name)
+						if player then helicopter.remove_heli_hud(player) end
+					end
 				end
 			end
 		end
@@ -349,17 +351,19 @@ core.register_entity("nss_helicopter:heli", {
 			self.owner = name
 		end
 
-		if self.owner == name or core.check_player_privs(clicker, {protection_bypass=true}) then
-			if name == self.driver_name then
-				-- driver clicked the object => driver gets off the vehicle
-				helicopter.dettach(self, clicker)
-				if self._passenger then
-					local passenger = core.get_player_by_name(self._passenger)
-					if passenger then
-						helicopter.dettach_pax(self, passenger)
-					end
+		if name == self.driver_name then
+			-- driver clicked the object => driver gets off the vehicle
+			helicopter.dettach(self, clicker)
+			if self._passenger then
+				local passenger = core.get_player_by_name(self._passenger)
+				if passenger then
+					helicopter.dettach_pax(self, passenger)
 				end
-			elseif not self.driver_name then
+			end
+		elseif name == self._passenger then
+			helicopter.dettach_pax(self, clicker)
+		elseif not self.driver_name or not core.get_player_by_name(self.driver_name) then
+			if self.owner == name or core.check_player_privs(clicker, {protection_bypass=true}) then
 				local is_under_water = helicopter.check_is_under_water(self.object)
 				if is_under_water then return end
 				-- temporary------
@@ -368,20 +372,8 @@ core.register_entity("nss_helicopter:heli", {
 
 				helicopter.attach(self, clicker)
 			end
-		else
-			--passenger section
-			--only can enter when the pilot is inside
-			if self.driver_name then
-				if self._passenger == nil then
-					helicopter.attach_pax(self, clicker)
-				else
-					helicopter.dettach_pax(self, clicker)
-				end
-			else
-				if self._passenger then
-					helicopter.dettach_pax(self, clicker)
-				end
-			end
+		elseif not self._passenger or not core.get_player_by_name(self._passenger) then
+			helicopter.attach_pax(self, clicker)
 		end
 	end,
 })
