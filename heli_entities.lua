@@ -139,14 +139,10 @@ core.register_entity("nss_helicopter:heli", {
 
 		touching_ground, liquid_below = helicopter.check_node_below(self)
 		vel = helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel) or vel
-		helicopter.sound_and_animation_manager(self)
+		helicopter.sound_and_animation_manager(self, touching_ground or liquid_below)
 
 		if vel.x == 0 and vel.y == 0 and vel.z == 0 then
 			return
-		end
-
-		if touching_ground == nil then
-			touching_ground, liquid_below = helicopter.check_node_below(self)
 		end
 
 		-- quadratic and constant deceleration
@@ -227,7 +223,7 @@ core.register_entity("nss_helicopter:heli", {
 			if can_stop then
 				--detach player
 				if self.sound_handle ~= nil then
-					helicopter.sound_and_animation_manager(self)
+					helicopter.sound_and_animation_manager(self, touching_ground or liquid_below)
 
 					--why its here? cause if the sound is attached, player must so
 					local player_owner = core.get_player_by_name(self.owner)
