@@ -103,9 +103,7 @@ core.register_entity("nss_helicopter:heli", {
 			self.color = data.stored_color
 			self.driver_name = data.stored_driver_name
 			--core.debug("loaded: ", self.energy)
-			local properties = self.object:get_properties()
-			properties.infotext = data.stored_owner .. S(" nice helicopter")
-			self.object:set_properties(properties)
+			helicopter.setText(self)
 		end
 
 		helicopter.paint(self, self.color)
@@ -192,8 +190,9 @@ core.register_entity("nss_helicopter:heli", {
 		if is_attached then
 			local impact = helicopter.get_hipotenuse_value(vel, self.last_vel)
 			if impact > 5 then
-				--self.damage = self.damage + impact --sum the impact value directly to damage meter
-				local curr_pos = self.object:get_pos()
+				-- self.damage = self.damage + impact
+				-- sum the impact value directly to damage meter
+				-- local curr_pos = self.object:get_pos()
 				core.sound_play("nssh_collision", {
 					to_player = self.driver_name,
 					--pos = curr_pos,
@@ -257,7 +256,7 @@ core.register_entity("nss_helicopter:heli", {
 			return
 		end
 
-		local touching_ground, _ = helicopter.check_node_below(self)
+		local touching_ground = helicopter.check_node_below(self)
 
 		--XXXXXXXX
 		local is_attached = false

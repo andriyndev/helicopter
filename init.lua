@@ -4,13 +4,7 @@
 
 helicopter = {}
 
-helicopter.S = nil
-
-if(core.get_translator ~= nil) then
-    helicopter.S = core.get_translator(core.get_current_modname())
-else
-    helicopter.S = function ( s ) return s end
-end
+helicopter.S = core.get_translator(core.get_current_modname())
 
 local path = core.get_modpath(core.get_current_modname())
 helicopter.path = path

@@ -12,8 +12,7 @@ function helicopter.paint(self, colstr)
         self.color = colstr
         local l_textures = self.initial_properties.textures
         for i, texture in ipairs(l_textures) do
-            local _, indx
-            _, indx = texture:find('nss_helicopter_painting.png')
+            local _, indx = texture:find('nss_helicopter_painting.png')
             if indx then
                 l_textures[i] = "nss_helicopter_painting.png^[multiply:".. colstr
             end
@@ -72,11 +71,11 @@ function helicopter.attach(self, player)
     player_api.set_animation(player, "sit")
     -- make the driver sit
     core.after(0.2, function()
-        local player = core.get_player_by_name(name)
-        if player then
+        local player2 = core.get_player_by_name(name)
+        if player2 then
             --player_api.set_animation(player, "sit")
-            player:set_animation({x =  81, y = 160},30, 0, true)
-            helicopter.update_heli_hud(player)
+            player2:set_animation({x =  81, y = 160},30, 0, true)
+            helicopter.update_heli_hud(player2)
         end
     end)
     -- disable gravity
@@ -117,9 +116,9 @@ function helicopter.attach_pax(self, player)
     player_api.set_animation(player, "sit")
     -- make the driver sit
     core.after(0.2, function()
-        local player = core.get_player_by_name(name)
-        if player then
-            player:set_animation({x =  81, y = 160},30, 0, true)
+        local player2 = core.get_player_by_name(name)
+        if player2 then
+            player2:set_animation({x =  81, y = 160},30, 0, true)
         end
     end)
 end
@@ -151,7 +150,7 @@ function helicopter.destroy(self, puncher)
         -- detach the driver first (puncher must be driver)
         puncher:set_detach()
         puncher:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-        player_api.player_attached[name] = nil
+        player_api.player_attached[self.driver_name] = nil
         -- player should stand again
         player_api.set_animation(puncher, "stand")
         self.driver_name = nil
@@ -165,16 +164,16 @@ function helicopter.destroy(self, puncher)
     self.object:remove()
 
     pos.y=pos.y+2
-    for _=1,8 do
-        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
+    for _ = 1, 8 do
+	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
     end
 
-    for _=1,7 do
-        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
+    for _ = 1, 7 do
+	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
     end
 
-    for _=1,7 do
-        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
+    for _ = 1, 7 do
+	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
     end
 
     core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steelblock')
