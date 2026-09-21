@@ -216,9 +216,9 @@ core.register_entity("nss_helicopter:heli", {
 		else
 			-- for some error the player can be detached from the helicopter, so lets set him attached again
 			local can_stop = true
-			if self.owner and self.driver_name and touching_ground == false then
+			if self.driver_name and touching_ground == false then
 				-- attach the driver again
-				local player = core.get_player_by_name(self.owner)
+				local player = core.get_player_by_name(self.driver_name)
 				if player then
 					helicopter.attach(self, player)
 					can_stop = false
