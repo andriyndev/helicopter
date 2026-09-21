@@ -170,8 +170,8 @@ core.register_entity("nss_helicopter:heli", {
 		]]--
 
 		local is_attached = false
-		if self.owner then
-			local player = core.get_player_by_name(self.owner)
+		if self.driver_name then
+			local player = core.get_player_by_name(self.driver_name)
 
 			if player then
 				local player_attach = player:get_attach()
@@ -226,8 +226,8 @@ core.register_entity("nss_helicopter:heli", {
 					helicopter.sound_and_animation_manager(self, touching_ground or liquid_below)
 
 					--why its here? cause if the sound is attached, player must so
-					local player_owner = core.get_player_by_name(self.owner)
-					if player_owner then helicopter.remove_heli_hud(player_owner) end
+					local player = core.get_player_by_name(self.driver_name)
+					if player then helicopter.remove_heli_hud(player) end
 				end
 			end
 		end
