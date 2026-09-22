@@ -362,7 +362,7 @@ core.register_entity("nss_helicopter:heli", {
 			end
 		elseif name == self._passenger then
 			helicopter.dettach_pax(self, clicker)
-		elseif not self.driver_name or not core.get_player_by_name(self.driver_name) then
+		elseif not self.driver_name then
 			if self.owner == name or core.check_player_privs(clicker, {protection_bypass=true}) then
 				local is_under_water = helicopter.check_is_under_water(self.object)
 				if is_under_water then return end
@@ -372,7 +372,7 @@ core.register_entity("nss_helicopter:heli", {
 
 				helicopter.attach(self, clicker)
 			end
-		elseif not self._passenger or not core.get_player_by_name(self._passenger) then
+		elseif not self._passenger then
 			helicopter.attach_pax(self, clicker)
 		end
 	end,
