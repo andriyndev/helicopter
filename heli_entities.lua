@@ -290,6 +290,7 @@ core.register_entity("nss_helicopter:heli", {
 						--mobkit.hurt(self,toolcaps.damage_groups.fleshy - 1)
 						--mobkit.make_sound(self,'hit')
 						self.hp_max = self.hp_max - 10
+						helicopter.setText(self)
 						core.sound_play("nssh_collision", {
 							object = self.object,
 							max_hear_distance = 5,
