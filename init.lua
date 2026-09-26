@@ -6,6 +6,8 @@ helicopter = {}
 
 helicopter.S = core.get_translator(core.get_current_modname())
 
+local path = core.get_modpath(core.get_current_modname())
+
 helicopter.friction_air_quadratic = 0.01
 helicopter.friction_air_constant = 0.2
 helicopter.friction_land_quadratic = 1
@@ -31,39 +33,19 @@ helicopter.colors ={
     yellow='#ffe400',
 }
 
-dofile(core.get_modpath("nss_helicopter") .. "/settings.lua")
---dofile(core.get_modpath(core.get_current_modname()) .. "/heli_hud.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_hud.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_utilities.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_entities.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_crafts.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_control.lua")
-dofile(core.get_modpath("nss_helicopter") .. "/heli_fuel_management.lua")
+helicopter.creative = core.global_exists("creative")
+
+if not core.global_exists("matrix3") then
+	dofile(path .. "/matrix.lua")
+end
+
+dofile(path .. "/settings.lua")
+dofile(path .. "/heli_hud.lua")
+dofile(path .. "/heli_utilities.lua")
+dofile(path .. "/heli_entities.lua")
+dofile(path .. "/heli_crafts.lua")
+dofile(path .. "/heli_control.lua")
+dofile(path .. "/heli_fuel_management.lua")
 
 
 helicopter.helicopter_last_time_command = 0
-
---
--- helpers and co.
---
-
-if not core.global_exists("matrix3") then
-	dofile(core.get_modpath("nss_helicopter") .. "/matrix.lua")
-end
-
-helicopter.creative = core.global_exists("creative")
-
-function helicopter.check_is_under_water(obj)
-	local pos_up = obj:get_pos()
-	pos_up.y = pos_up.y + 0.1
-	local node_up = core.get_node(pos_up).name
-	local nodedef = core.registered_nodes[node_up]
-	local liquid_up = nodedef.liquidtype ~= "none"
-	return liquid_up
-end
-
-
-
-
-
-

@@ -38,15 +38,6 @@ function helicopter.get_gauge_angle(value)
 	return angle
 end
 
-function helicopter.contains(table, val)
-	for k,v in pairs(table) do
-		if k == val then
-			return v
-		end
-	end
-	return false
-end
-
 function helicopter.updateIndicator(self)
 	local energy_indicator_angle = helicopter.get_gauge_angle(self.energy)
 	self.pointer:set_attach(self.object, '',
@@ -58,17 +49,16 @@ function helicopter.loadFuel(self, player_name)
 	local player = core.get_player_by_name(player_name)
 	if not player then return end
 
-	local inv = player:get_inventory()
-	local itmstck=player:get_wielded_item()
-	local item_name = ""
-	if itmstck then item_name = itmstck:get_name() end
+	local wielded_stack = player:get_wielded_item()
+	if wielded_stack:is_empty() then
+		return false
+	end
 
-	local stack
-	local fuel = helicopter.contains(helicopter.fuel, item_name)
+	local fuel = helicopter.fuel[wielded_stack:get_name()]
 	if fuel then
-		stack = ItemStack(item_name .. " 1")
 		if self.energy < 10 then
-			inv:remove_item("main", stack)
+			wielded_stack:take_item()
+			player:set_wielded_item(wielded_stack)
 			self.energy = self.energy + fuel
 			if self.energy > 10 then self.energy = 10 end
 
@@ -80,5 +70,3 @@ function helicopter.loadFuel(self, player_name)
 
 	return false
 end
-
-

@@ -137,10 +137,6 @@ core.register_entity("nss_helicopter:heli", {
 			return
 		end
 
-		if touching_ground == nil then
-			touching_ground, liquid_below = helicopter.check_node_below(self.object)
-		end
-
 		-- quadratic and constant deceleration
 		local speedsq = helicopter.vector_length_sq(vel)
 		local fq, fc
@@ -166,8 +162,8 @@ core.register_entity("nss_helicopter:heli", {
 		]]--
 
 		local is_attached = false
-		if self.owner then
-			local player = core.get_player_by_name(self.owner)
+		if self.driver_name then
+			local player = core.get_player_by_name(self.driver_name)
 
 			if player then
 				local player_attach = player:get_attach()
@@ -207,9 +203,9 @@ core.register_entity("nss_helicopter:heli", {
 		else
 			-- for some error the player can be detached from the helicopter, so lets set him attached again
 			local can_stop = true
-			if self.owner and self.driver_name and touching_ground == false then
+			if self.driver_name and touching_ground == false then
 				-- attach the driver again
-				local player = core.get_player_by_name(self.owner)
+				local player = core.get_player_by_name(self.driver_name)
 				if player then
 					helicopter.attach(self, player)
 					can_stop = false
@@ -221,9 +217,11 @@ core.register_entity("nss_helicopter:heli", {
 				if self.sound_handle ~= nil then
 					helicopter.sound_and_animation_manager(self)
 
-					--why its here? cause if the sound is attached, player must so
-					local player_owner = core.get_player_by_name(self.owner)
-					if player_owner then helicopter.remove_heli_hud(player_owner) end
+					if self.driver_name then
+						--why its here? cause if the sound is attached, player must so
+						local player = core.get_player_by_name(self.driver_name)
+						if player then helicopter.remove_heli_hud(player) end
+					end
 				end
 			end
 		end
@@ -284,6 +282,7 @@ core.register_entity("nss_helicopter:heli", {
 						--mobkit.hurt(self,toolcaps.damage_groups.fleshy - 1)
 						--mobkit.make_sound(self,'hit')
 						self.hp_max = self.hp_max - 10
+						helicopter.setText(self)
 						core.sound_play("nssh_collision", {
 							object = self.object,
 							max_hear_distance = 5,
