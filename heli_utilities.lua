@@ -165,15 +165,15 @@ function helicopter.destroy(self, puncher)
 
     pos.y=pos.y+2
     for _ = 1, 8 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
     end
 
     for _ = 1, 7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
     end
 
     for _ = 1, 7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
     end
 
     core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steelblock')
@@ -210,4 +210,13 @@ function helicopter.sound_and_animation_manager(self, no_air_below)
             turn_on(self)
         end
     end
+end
+
+function helicopter.check_is_under_water(obj)
+	local pos_up = obj:get_pos()
+	pos_up.y = pos_up.y + 0.1
+	local node_up = core.get_node(pos_up).name
+	local nodedef = core.registered_nodes[node_up]
+	local liquid_up = nodedef.liquidtype ~= "none"
+	return liquid_up
 end

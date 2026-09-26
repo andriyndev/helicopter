@@ -70,5 +70,3 @@ function helicopter.loadFuel(self, player_name)
 
 	return false
 end
-
-

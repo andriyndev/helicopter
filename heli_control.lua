@@ -15,10 +15,6 @@ function helicopter.vector_length_sq(v)
 	return v.x * v.x + v.y * v.y + v.z * v.z
 end
 
-if not core.global_exists("matrix3") then
-	dofile(helicopter.path .. "/matrix.lua")
-end
-
 function helicopter.check_node_below(self)
 	local pos_below = self.object:get_pos()
 	local cbox = self.initial_properties.collisionbox
@@ -179,7 +175,7 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 		local energy_indicator_angle = ((self.energy * 18) - 90) * -1
 		if not self.pointer:get_luaentity() then
 			--in case it have lost the entity by some conflict
-			self.pointer=core.add_entity({x=0,y=11.26,z=9.37},"nss_helicopter:pointer")
+			self.pointer=core.add_entity({x=0,y=11.26,z=9.37}, "nss_helicopter:pointer")
 		end
 		self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
 	end
