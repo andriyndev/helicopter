@@ -34,6 +34,8 @@ helicopter.colors ={
     yellow='#ffe400',
 }
 
+helicopter.creative = core.global_exists("creative")
+
 if not core.global_exists("matrix3") then
 	dofile(path .. "/matrix.lua")
 end
@@ -48,24 +50,3 @@ dofile(path .. "/heli_fuel_management.lua")
 
 
 helicopter.helicopter_last_time_command = 0
-
---
--- helpers and co.
---
-
-helicopter.creative = core.global_exists("creative")
-
-function helicopter.check_is_under_water(obj)
-	local pos_up = obj:get_pos()
-	pos_up.y = pos_up.y + 0.1
-	local node_up = core.get_node(pos_up).name
-	local nodedef = core.registered_nodes[node_up]
-	local liquid_up = nodedef.liquidtype ~= "none"
-	return liquid_up
-end
-
-
-
-
-
-
