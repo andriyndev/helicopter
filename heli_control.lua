@@ -15,10 +15,6 @@ function helicopter.vector_length_sq(v)
 	return v.x * v.x + v.y * v.y + v.z * v.z
 end
 
-if not core.global_exists("matrix3") then
-	dofile(helicopter.path .. "/matrix.lua")
-end
-
 function helicopter.check_node_below(obj)
 	local pos_below = obj:get_pos()
 	pos_below.y = pos_below.y - 0.1

@@ -34,6 +34,10 @@ helicopter.colors ={
     yellow='#ffe400',
 }
 
+if not core.global_exists("matrix3") then
+	dofile(path .. "/matrix.lua")
+end
+
 dofile(path .. "/settings.lua")
 dofile(path .. "/heli_hud.lua")
 dofile(path .. "/heli_utilities.lua")
@@ -48,10 +52,6 @@ helicopter.helicopter_last_time_command = 0
 --
 -- helpers and co.
 --
-
-if not core.global_exists("matrix3") then
-	dofile(path .. "/matrix.lua")
-end
 
 helicopter.creative = core.global_exists("creative")
 
