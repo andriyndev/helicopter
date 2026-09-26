@@ -7,7 +7,6 @@ helicopter = {}
 helicopter.S = core.get_translator(core.get_current_modname())
 
 local path = core.get_modpath(core.get_current_modname())
-helicopter.path = path
 
 helicopter.friction_air_quadratic = 0.01
 helicopter.friction_air_constant = 0.2
