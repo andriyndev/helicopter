@@ -21,7 +21,7 @@ function helicopter.paint(self, colstr)
                 l_textures[i] = "nss_helicopter_colective.png^[multiply:".. colstr
             end
         end
-	    self.object:set_properties({textures=l_textures})
+        self.object:set_properties({textures=l_textures})
     end
 end
 
@@ -73,7 +73,7 @@ function helicopter.attach(self, player)
     core.after(0.2, function()
         local player2 = core.get_player_by_name(name)
         if player2 then
-	        --player_api.set_animation(player, "sit")
+            --player_api.set_animation(player, "sit")
             player2:set_animation({x =  81, y = 160},30, 0, true)
             helicopter.update_heli_hud(player2)
         end
@@ -165,15 +165,15 @@ function helicopter.destroy(self, puncher)
 
     pos.y=pos.y+2
     for _ = 1, 8 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steel_ingot')
     end
 
     for _ = 1, 7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:diamond')
     end
 
     for _ = 1, 7 do
-	    core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
+        core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:mese_crystal')
     end
 
     core.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'default:steelblock')

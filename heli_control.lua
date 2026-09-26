@@ -16,7 +16,7 @@ function helicopter.vector_length_sq(v)
 end
 
 if not core.global_exists("matrix3") then
-	dofile(core.get_modpath("nss_helicopter") .. "/matrix.lua")
+	dofile(helicopter.path .. "/matrix.lua")
 end
 
 function helicopter.check_node_below(obj)
@@ -139,7 +139,6 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 			rot.y = yaw
 		end
 
-
 	else
 		rot.x = 0
 		rot.z = 0
@@ -158,16 +157,14 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 	if self.energy > 0 and touching_ground == false then
 
 		local consumed_power = (power/1500)
-		self.energy = self.energy - consumed_power;
+		self.energy = math.max(self.energy - consumed_power, 0);
 
 		local energy_indicator_angle = ((self.energy * 18) - 90) * -1
-		if self.pointer:get_luaentity() then
-			self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
-		else
+		if not self.pointer:get_luaentity() then
 			--in case it have lost the entity by some conflict
-			self.pointer=core.add_entity({x=0,y=11.26,z=9.37},"nss_helicopter:pointer")
-			self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
+			self.pointer=core.add_entity({x=0,y=11.26,z=9.37}, "nss_helicopter:pointer")
 		end
+		self.pointer:set_attach(self.object,'',{x=0,y=11.26,z=9.37},{x=0,y=0,z=energy_indicator_angle})
 	end
 	if self.energy <= 0 then
 		power = 0.2
@@ -189,5 +186,3 @@ function helicopter.heli_control(self, dtime, touching_ground, liquid_below, vel
 	added_vel = vector.add(added_vel, vector.multiply(helicopter.vector_up, -helicopter.gravity * dtime))
 	return vector.add(vel_before, added_vel)
 end
-
-
